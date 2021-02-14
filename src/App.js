@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { Grid } from '@material-ui/core';
 import youtube from './api/youtube';
-import { SearchBar, VideoList, VideoDetail } from './components';
+import { SearchBar, VideoDetail, VideoList } from './components';
 
 class App extends Component {
   state = {
-    video: [],
+    videos: [],
     selectedVideo: null,
+  }
+
+  componentDidMount() {
+    this.handleSubmit('pdf generation with react and node')
   }
 
   handleSubmit = async (searchTerm) => {
@@ -19,13 +23,17 @@ class App extends Component {
       }
     });
     
-    this.setState({ video: response.data.items, selectedVideo: response.data.items[0]})
+    this.setState({ videos: response.data.items, selectedVideo: response.data.items[0]})
+  }
+
+  onVideoSelect = (video) => {
+    this.setState({selectedVideo: video });
   }
 
   render() {
-    const { selectedVideo } = this.state; 
+    const { selectedVideo, videos } = this.state; 
     return (
-      <Grid justify='center' container spacing={10}>
+      <Grid style={{ justifyContent: "center" }} container spacing={10}>
         <Grid item xs={12}>
           <Grid container spacing={10}>
             <Grid item xs={12}>
@@ -37,7 +45,7 @@ class App extends Component {
             </Grid>
 
             <Grid item xs={4}>
-              {/* Video List */}
+              <VideoList videos={videos} onVideoSelect={this.onVideoSelect} />
             </Grid>
           </Grid>
         </Grid>
